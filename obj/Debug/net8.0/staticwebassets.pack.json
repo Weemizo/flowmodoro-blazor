@@ -1,0 +1,41 @@
+{
+  "Files": [
+    {
+      "Id": "C:\\Users\\mrcel\\Desktop\\Repozytoria\\flowmodoro-blazor\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\flowmodoro-blazor.bundle.scp.css",
+      "PackagePath": "staticwebassets\\flowmodoro-blazor.bundle.scp.css"
+    },
+    {
+      "Id": "C:\\Users\\mrcel\\Desktop\\Repozytoria\\flowmodoro-blazor\\wwwroot\\app.css",
+      "PackagePath": "staticwebassets\\app.css"
+    },
+    {
+      "Id": "C:\\Users\\mrcel\\Desktop\\Repozytoria\\flowmodoro-blazor\\wwwroot\\bootstrap\\bootstrap.min.css",
+      "PackagePath": "staticwebassets\\bootstrap\\bootstrap.min.css"
+    },
+    {
+      "Id": "C:\\Users\\mrcel\\Desktop\\Repozytoria\\flowmodoro-blazor\\wwwroot\\bootstrap\\bootstrap.min.css.map",
+      "PackagePath": "staticwebassets\\bootstrap\\bootstrap.min.css.map"
+    },
+    {
+      "Id": "C:\\Users\\mrcel\\Desktop\\Repozytoria\\flowmodoro-blazor\\wwwroot\\favicon.png",
+      "PackagePath": "staticwebassets\\favicon.png"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.build.flowmodoro-blazor.props",
+      "PackagePath": "build\\flowmodoro-blazor.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildMultiTargeting.flowmodoro-blazor.props",
+      "PackagePath": "buildMultiTargeting\\flowmodoro-blazor.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildTransitive.flowmodoro-blazor.props",
+      "PackagePath": "buildTransitive\\flowmodoro-blazor.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.flowmodoro-blazor.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    }
+  ],
+  "ElementsToRemove": []
+}
