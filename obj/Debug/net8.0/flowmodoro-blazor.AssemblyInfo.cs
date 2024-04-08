@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("flowmodoro-blazor")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7aa20fa780046bcadfc655da07a312099a21ee54")]
 [assembly: System.Reflection.AssemblyProductAttribute("flowmodoro-blazor")]
 [assembly: System.Reflection.AssemblyTitleAttribute("flowmodoro-blazor")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
