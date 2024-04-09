@@ -1,0 +1,62 @@
+@page "/pomodoro"
+@using PomodoroTimer.Services
+
+@inject TimerService TimerService
+
+<h1>Pomodoro Timer</h1>
+
+@if (TimerService != null && !TimerService.IsRunning)
+{
+    <input type="number" @bind="duration" min="1" max="60" />
+    <button @onclick="StartTimer">Start</button>
+}
+else
+{
+    <p>Time remaining: @FormatTime(remainingSeconds)</p>
+    <button @onclick="StopTimer">Stop</button>
+}
+
+@code {
+    private int duration;
+    private int remainingSeconds;
+
+    protected override void OnInitialized()
+    {
+        if (TimerService != null)
+        {
+            TimerService.OnTick += UpdateRemainingSeconds;
+            TimerService.OnTimerComplete += TimerComplete;
+        }
+    }
+
+    private void StartTimer()
+    {
+        if (TimerService != null && duration > 0)
+        {
+            TimerService.Start(duration);
+        }
+    }
+
+    private void StopTimer()
+    {
+        TimerService?.Stop();
+    }
+
+    private void UpdateRemainingSeconds(int seconds)
+    {
+        remainingSeconds = seconds;
+        InvokeAsync(StateHasChanged);
+    }
+
+    private void TimerComplete()
+    {
+        remainingSeconds = 0;
+        InvokeAsync(StateHasChanged);
+    }
+
+    private string FormatTime(int seconds)
+    {
+        TimeSpan time = TimeSpan.FromSeconds(seconds);
+        return $"{time.Minutes:00}:{time.Seconds:00}";
+    }
+}
