@@ -1,46 +1,32 @@
-namespace PomodoroTimer.Services
+namespace FlowmodoroTimer.Services
 {
     public class TimerService
     {
-        public event Action<int>? OnTick;
-        public event Action? OnTimerComplete;
+        private Timer? _timer;
+        private int _remainingSeconds;
+        private Action<int>? _onTick; // Define a delegate to hold the callback function
 
-        private int duration;
-        private bool isRunning;
-        private TimeSpan remainingTime;
-        private Task? timerTask;
+        public bool IsRunning { get; private set; }
 
-        public bool IsRunning => isRunning;
-
-        public void Start(int durationInMinutes)
+        // Method to start the timer and accept a callback function to be called on each tick
+        public void Start(Action<int> onTick)
         {
-            if (isRunning)
-                return;
-
-            duration = durationInMinutes;
-            remainingTime = TimeSpan.FromMinutes(duration);
-            isRunning = true;
-
-            timerTask = Task.Run(async () =>
-            {
-                while (remainingTime.TotalSeconds > 0)
-                {
-                    await Task.Delay(1000);
-                    remainingTime = remainingTime.Subtract(TimeSpan.FromSeconds(1));
-                    OnTick?.Invoke((int)remainingTime.TotalSeconds);
-                }
-                isRunning = false;
-                OnTimerComplete?.Invoke();
-            });
+            _remainingSeconds = 0;
+            IsRunning = true;
+            _onTick = onTick; // Assign the callback function
+            _timer = new Timer(Tick, null, 0, 1000);
         }
 
         public void Stop()
         {
-            if (!isRunning)
-                return;
+            _timer?.Dispose();
+            IsRunning = false;
+        }
 
-            timerTask?.Wait();
-            isRunning = false;
+        private void Tick(object? state)
+        {
+            _remainingSeconds++;
+            _onTick?.Invoke(_remainingSeconds); // Call the callback function on each tick
         }
     }
 }

@@ -1,0 +1,78 @@
+@page "/flowmodoro"
+@using FlowmodoroTimer.Services
+@inject TimerService TimerService
+
+<h1>Flowmodoro Timer</h1>
+
+@if (!TimerService.IsRunning)
+{
+    <button @onclick="StartTimer">Start</button>
+}
+else
+{
+    <p>Time elapsed: @FormatTime(elapsedSeconds)</p>
+    <button @onclick="StopTimer">Stop</button>
+}
+
+@if (pauseTime > 0)
+{
+    <p>Break time remaining: @FormatTime(pauseTime)</p>
+}
+
+@code {
+    private int elapsedSeconds;
+    private int pauseTime;
+    private DateTime startTime;
+
+    protected override void OnInitialized()
+    {
+        TimerService.Start(UpdateTime); // Start the timer and register UpdateTime as a callback
+        startTime = DateTime.Now;
+    }
+
+    private void StartTimer()
+    {
+        TimerService.Start(UpdateTime); // Start the timer and register UpdateTime as a callback
+        startTime = DateTime.Now;
+    }
+
+    private void StopTimer()
+    {
+        TimerService.Stop();
+        CalculateBreakTime();
+    }
+
+    private void UpdateTime(int seconds)
+    {
+        elapsedSeconds = seconds;
+        InvokeAsync(StateHasChanged); // Update UI
+    }
+
+    private void CalculateBreakTime()
+    {
+        var elapsedSeconds = (int)(DateTime.Now - startTime).TotalSeconds;
+        pauseTime = elapsedSeconds / 5;
+
+        // Start countdown for break time
+        var timer = new System.Timers.Timer(1000);
+        timer.Elapsed += (sender, e) =>
+        {
+            if (pauseTime > 0)
+            {
+                pauseTime--;
+                InvokeAsync(StateHasChanged); // Update UI
+            }
+            else
+            {
+                timer.Stop();
+            }
+        };
+        timer.Start();
+    }
+
+    private string FormatTime(int seconds)
+    {
+        TimeSpan time = TimeSpan.FromSeconds(seconds);
+        return $"{time.Minutes:00}:{time.Seconds:00}";
+    }
+}
