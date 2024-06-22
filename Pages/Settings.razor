@@ -75,7 +75,7 @@
     }
 
     .popup.active {
-        display: block; /* Show when active */
+        display: block;
     }
 
     .breakTimeInfo {
@@ -87,10 +87,14 @@
         margin: 0.5rem 0;
     }
 
+    .togglePopupButton {
+        padding: 0.5rem 1rem;
+    }
+
 </style>
 
 <div class="customizedBreakTimer">
-    <button @onclick="TogglePopup">?</button>
+    <button @onclick="TogglePopup" class="togglePopupButton">?</button>
     <div class="popup" id="breakTimeInfo">
         Customizing your break time might be useful if you don't feel like you get enough break. 
         <br> The default set is <strong><i>5</i></strong>, which means that any time you spend is divided by <strong><i>5</i></strong>

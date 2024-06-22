@@ -252,16 +252,16 @@ button:hover {
 @code {
     private int elapsedSeconds;
     private int pauseTime;
-    private DateTime startTime;
-    private int currentInterruptions = 0;
+    private DateTime startTime; // czas rozpoczecia
+    private int currentInterruptions = 0; // licznik rozproszen
 
-    private List<string> todos = new List<string>();
-    private string newTodo = string.Empty;
+    private List<string> todos = new List<string>(); // lista todo
+    private string newTodo = string.Empty; // nowe todo
 
     private void StartTimer()
     {
         TimerService.Start(UpdateTime);
-        startTime = DateTime.Now;
+        startTime = DateTime.Now; // wystartowanie timera z aktualnym czasem
     }
 
     private void StopTimer()
@@ -285,8 +285,8 @@ button:hover {
 
     private void CalculateBreakTime()
     {
-        var elapsedSeconds = (int)(DateTime.Now - startTime).TotalSeconds;
-        pauseTime = elapsedSeconds / SettingsService.CustomizedBreakTime;
+        var elapsedSeconds = (int)(DateTime.Now - startTime).TotalSeconds; // obliczenie czasu trwania przerwy w sekundach
+        pauseTime = elapsedSeconds / SettingsService.CustomizedBreakTime; // podzielenie czasu przez ustawiony czas przerwy
 
         var timer = new System.Timers.Timer(1000);
         timer.Elapsed += (sender, e) =>
@@ -294,7 +294,7 @@ button:hover {
             if (pauseTime > 0)
             {
                 pauseTime--;
-                InvokeAsync(StateHasChanged);
+                InvokeAsync(StateHasChanged); // odswiezenie stanu
             }
             else
             {
@@ -329,7 +329,7 @@ button:hover {
         if (!string.IsNullOrWhiteSpace(newTodo))
         {
             todos.Add(newTodo);
-            newTodo = string.Empty; // Clear input
+            newTodo = string.Empty; // wyczyszczenie todo
         }
     }
 

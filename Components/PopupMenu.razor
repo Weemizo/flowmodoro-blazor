@@ -1,5 +1,7 @@
 @namespace FlowmodoroTimer.Components
 
+@* Menu ktory sie wyswietla po kliknieciu *@
+
 <style>
 .popup-menu {
     position: fixed;
@@ -46,16 +48,16 @@
 
 <div class="popup-menu" style="display: @(IsVisible ? "block" : "none")">
     <div class="popup-content">
-        <div class="close-btn" @onclick="Close">x</div>
+        <div class="close-btn" @onclick="Close">x</div> <!-- przycisk zamykajacy -->
         <nav>
             <div class="nav-item">
                 <NavLink class="nav-link" href="/" @onclick="Close">
-                    <span class="bi bi-clock-fill" aria-hidden="true"></span> Flowmodoro Timer
+                    <span class="bi bi-clock-fill" aria-hidden="true" style="margin-right:0.25rem"></span> Flowmodoro Timer
                 </NavLink>
             </div>
             <div class="nav-item">
                 <NavLink class="nav-link" href="/settings" @onclick="Close">
-                    <span class="bi bi-gear-fill" aria-hidden="true"></span> Settings
+                    <span class="bi bi-gear-fill" aria-hidden="true" style="margin-right:0.25rem"></span> Settings
                 </NavLink>
             </div>
         </nav>
@@ -64,14 +66,14 @@
 
 @code {
     [Parameter]
-    public bool IsVisible { get; set; }
+    public bool IsVisible { get; set; } // parametr do kontrolowania czy menu jest widoczne
 
     [Parameter]
-    public EventCallback OnClose { get; set; }
+    public EventCallback OnClose { get; set; } // parametr do obslugi zdarzenia zamkniecia
 
     private void Close()
     {
-        IsVisible = false;
-        OnClose.InvokeAsync(null);
+        IsVisible = false; // zamykamy menu przez ustawienie IsVisible na false
+        OnClose.InvokeAsync(null); 
     }
 }
