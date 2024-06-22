@@ -2,37 +2,180 @@
 @using FlowmodoroTimer.Services
 @inject TimerService TimerService
 
-<h1>Flowmodoro Timer</h1>
+<style>
+    body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f0f0f0; /* Light background color */
+    color: #333; /* Dark text color */
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* Container for pages */
+  .page-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f0f0f0; /* Light background color */
+  }
+  
+  /* Main content container */
+  .main-content {
+    width: 100%;
+    max-width: 1200px;
+    margin: 20px;
+    padding: 20px;
+  }
+  
+  /* Module container for specific components */
+  .module-container {
+    background-color: #fff;
+    border-radius: 20px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    padding: 20px;
+  }
+  
+  /* Stopwatch and timer styles */
+  .stopwatch-container {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+  
+  .timer {
+    background-color: #f0f0f0; /* Light background color */
+    border-radius: 20px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  }
+  
+  .timeText {
+    font-size: 3rem;
+    font-weight: bold;
+    color: #333; /* Dark text color */
+  }
+  
+  .timeText h2 {
+    font-size: 1.5rem;
+    color: #333; /* Dark text color */
+  }
+  
+  .flexRow {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+  }
+  
+  button {
+    padding: 10px 20px;
+    margin: 0 5px;
+    background-color: #4CAF50; /* Green */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  button:hover {
+    background-color: #45a049; /* Darker green on hover */
+  }
+  
+  /* Other container styles */
+  .other-container {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .interruptions-box, .estimated-break {
+    width: calc(50% - 10px);
+    background-color: #fff;
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    text-align: center;
+  }
+  
+  .interruptions-box h3, .estimated-break h3 {
+    font-size: 1.2rem;
+    color: #333; /* Dark text color */
+  }
+  
+  .counter {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+  }
+  
+  .material-symbols-outlined {
+    font-size: 2rem;
+    margin: 0 10px;
+    cursor: pointer;
+  }
+  
+  .break-time {
+    font-size: 2rem;
+    color: #333; /* Dark text color */
+    margin-top: 10px;
+  }
+  
+</style>
 
-@if (!TimerService.IsRunning)
-{
-    <button @onclick="StartTimer">Start</button>
-}
-else
-{
-    <p>Time elapsed: @FormatTime(elapsedSeconds)</p>
-    <button @onclick="StopTimer">Stop</button>
-}
-
-@if (pauseTime > 0)
-{
-    <p>Break time remaining: @FormatTime(pauseTime)</p>
-}
+<div class="page-container">
+    <div class="main-content">
+        <div class="module-container">
+            <div class="stopwatch-container white-border">
+                <div class="timer">
+                    <div class="time">
+                        <div class="timeText">
+                            <h1>@FormatTime(elapsedSeconds)</h1>
+                            <h2>:00</h2>
+                        </div>
+                        @if (!TimerService.IsRunning)
+                        {
+                            <div class="flexRow">
+                                <button @onclick="StartTimer">Start</button>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="flexRow">
+                                <button @onclick="StopTimer">Stop</button>
+                                <button @onclick="ResetTimer">Reset</button>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="other-container flexCol">
+                <div class="interruptions-box white-border">
+                    <h3>Interruptions</h3>
+                    <div class="flexRow counter">
+                        <button class="btn btn-primary" @onclick="DecrementCount">-</button>
+                        <h1>@currentCount</h1>
+                        <button class="btn btn-primary" @onclick="IncrementCount">+</button>
+                    </div>
+                </div>
+                <div class="estimated-break white-border">
+                    <h3>Estimated <br>Break Time:</h3>
+                    <h2 class="break-time"><strong>@pauseTime</strong> min</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 @code {
     private int elapsedSeconds;
     private int pauseTime;
     private DateTime startTime;
-
-    protected override void OnInitialized()
-    {
-        TimerService.Start(UpdateTime); // Start the timer and register UpdateTime as a callback
-        startTime = DateTime.Now;
-    }
+    private int currentCount = 0;
 
     private void StartTimer()
     {
-        TimerService.Start(UpdateTime); // Start the timer and register UpdateTime as a callback
+        TimerService.Start(UpdateTime);
         startTime = DateTime.Now;
     }
 
@@ -42,10 +185,17 @@ else
         CalculateBreakTime();
     }
 
+    private void ResetTimer()
+    {
+        TimerService.Reset();
+        elapsedSeconds = 0;
+        pauseTime = 0;
+    }
+
     private void UpdateTime(int seconds)
     {
         elapsedSeconds = seconds;
-        InvokeAsync(StateHasChanged); // Update UI
+        InvokeAsync(StateHasChanged);
     }
 
     private void CalculateBreakTime()
@@ -53,14 +203,13 @@ else
         var elapsedSeconds = (int)(DateTime.Now - startTime).TotalSeconds;
         pauseTime = elapsedSeconds / 5;
 
-        // Start countdown for break time
         var timer = new System.Timers.Timer(1000);
         timer.Elapsed += (sender, e) =>
         {
             if (pauseTime > 0)
             {
                 pauseTime--;
-                InvokeAsync(StateHasChanged); // Update UI
+                InvokeAsync(StateHasChanged);
             }
             else
             {
@@ -75,4 +224,19 @@ else
         TimeSpan time = TimeSpan.FromSeconds(seconds);
         return $"{time.Minutes:00}:{time.Seconds:00}";
     }
+        private void IncrementCount()
+    {
+        currentCount++;
+    }
+    
+        private void DecrementCount()
+    {
+        currentCount--;
+
+        if (currentCount < 0)
+        {
+            currentCount = 0;
+        }
+    }
+
 }

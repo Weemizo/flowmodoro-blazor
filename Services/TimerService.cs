@@ -23,6 +23,14 @@ namespace FlowmodoroTimer.Services
             IsRunning = false;
         }
 
+        public void Reset()
+        {
+            _timer?.Dispose();
+            _remainingSeconds = 0;
+            IsRunning = false;
+            _onTick?.Invoke(_remainingSeconds); // Notify callback with reset time
+        }
+
         private void Tick(object? state)
         {
             _remainingSeconds++;
