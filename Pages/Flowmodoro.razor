@@ -1,137 +1,203 @@
-@page "/flowmodoro"
+@page "/"
 @using FlowmodoroTimer.Services
 @inject TimerService TimerService
+@inject SettingsService SettingsService
 
 <style>
-    body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f0f0f0; /* Light background color */
-    color: #333; /* Dark text color */
-    margin: 0;
-    padding: 0;
-  }
-  
-  /* Container for pages */
-  .page-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background-color: #f0f0f0; /* Light background color */
-  }
-  
-  /* Main content container */
-  .main-content {
-    width: 100%;
-    max-width: 1200px;
-    margin: 20px;
-    padding: 20px;
-  }
-  
-  /* Module container for specific components */
-  .module-container {
-    background-color: #fff;
-    border-radius: 20px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-    padding: 20px;
-  }
-  
-  /* Stopwatch and timer styles */
-  .stopwatch-container {
-    width: 100%;
-    margin-bottom: 20px;
-  }
-  
-  .timer {
-    background-color: #f0f0f0; /* Light background color */
-    border-radius: 20px;
-    padding: 20px;
+textarea:focus, input:focus, button:focus{
+    outline: none;
+}
+*:focus {
+    outline: none;
+}
+.desc {
     text-align: center;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-  }
+    font-size: 1rem;
+    color: #000000;
+    margin-top: 1rem;
+}
+
+.title {
+    text-align: center;
+    font-size: 2.5rem;
+    background: linear-gradient(180deg, rgb(5, 39, 103) 0%, #3a0647 70%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.page-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f0f0f0;
   
-  .timeText {
-    font-size: 3rem;
-    font-weight: bold;
-    color: #333; /* Dark text color */
-  }
-  
-  .timeText h2 {
-    font-size: 1.5rem;
-    color: #333; /* Dark text color */
-  }
-  
-  .flexRow {
-    display: flex;
-    justify-content: center;
-    margin-top: 10px;
-  }
-  
-  button {
-    padding: 10px 20px;
-    margin: 0 5px;
-    background-color: #4CAF50; /* Green */
-    color: white;
+}
+
+.main-content {
+  width: 100%;
+  max-width: 50vw;
+  margin: 2rem;
+  padding: 2rem;
+}
+
+.module-container {
+  background-color: #fff;
+  border-radius: 2rem;
+  box-shadow: 0rem 0.5rem 1rem rgba(0, 0, 0, 0.5);
+  padding: 2rem;
+}
+
+.stopwatch-container {
+  width: 100%;
+  margin-bottom: 2rem;
+}
+
+.timer {
+  background-color: #f0f0f0;
+  border-radius: 2rem;
+  padding: 2rem;
+  text-align: center;
+}
+
+.timeText {
+  font-size: 3rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.timeText h2 {
+  font-size: 1.5rem;
+  color: #333;
+}
+
+.flexRow {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+button {
+    text-decoration: none;
+    display: inline-block;
+    vertical-align: middle;
+    text-shadow: 0 -1px 0 rgb(255, 255, 255);
+    padding: 1rem 2rem;
+    margin: 0.5rem;
     border: none;
-    border-radius: 5px;
+    border-radius: 0.5rem;
     cursor: pointer;
     transition: background-color 0.3s ease;
-  }
-  
-  button:hover {
-    background-color: #45a049; /* Darker green on hover */
-  }
-  
-  /* Other container styles */
-  .other-container {
-    display: flex;
-    justify-content: space-between;
-  }
-  
-  .interruptions-box, .estimated-break {
-    width: calc(50% - 10px);
-    background-color: #fff;
-    border-radius: 20px;
-    padding: 20px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
     text-align: center;
-  }
-  
-  .interruptions-box h3, .estimated-break h3 {
-    font-size: 1.2rem;
-    color: #333; /* Dark text color */
-  }
-  
-  .counter {
+    background-image: linear-gradient(180deg, rgb(5, 39, 103) 0%, #3a0647 70%);
+    -webkit-text-fill-color: transparent;
+}
+
+button:hover {
+  background-image: linear-gradient(180deg, rgb(5, 39, 103) 0%, #3a0647 70%);
+  text-shadow: 0 -1px 0 rgb(131, 131, 131);
+  transition: all 0.3s ease;
+}
+
+.other-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.interruptions-box, .estimated-break {
+  width: calc(50% - 1rem);
+  background-color: #fff;
+  border-radius: 2rem;
+  padding: 2rem;
+  box-shadow: 0rem 0.5rem 1rem rgba(0, 0, 0, 0.075);
+  text-align: center;
+}
+
+.interruptions-box h3, .estimated-break h3 {
+  font-size: 2rem;
+  color: #333;
+}
+
+.counter {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 1rem;
+}
+
+.material-symbols-outlined {
+  font-size: 2rem;
+  margin: 0 1rem;
+  cursor: pointer;
+}
+
+.break-time {
+    background-image: linear-gradient(180deg, rgb(5, 39, 103) 0%, #3a0647 70%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.todo-container {
+    margin-top: 2rem;
+    padding: 1rem;
+    border-top: 1px solid #ccc;
+}
+
+.todo-input {
     display: flex;
-    justify-content: center;
+    margin-bottom: 1rem;
+}
+
+.todo-input input {
+    flex: 1;
+    padding: 0.75rem;
+    margin-right: 1rem;
+    border: 0.1rem solid #ccc;
+    border-radius: 0.5rem;
+}
+
+.todo-input button {
+    padding: 0.75rem 1.5rem;
+}
+
+.todo-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.todo-list li {
+    display: flex;
     align-items: center;
-    margin-top: 10px;
-  }
-  
-  .material-symbols-outlined {
-    font-size: 2rem;
-    margin: 0 10px;
+    justify-content: space-between;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #ccc;
+}
+
+.remove-button {
+    background: none;
+    border: none;
     cursor: pointer;
-  }
-  
-  .break-time {
-    font-size: 2rem;
-    color: #333; /* Dark text color */
-    margin-top: 10px;
-  }
-  
+    text-shadow: 0 -1px 0 rgb(255, 0, 0) !important;
+    font-weight: bold;
+}
+.remove-button:hover {
+    background-image: none !important;
+    text-shadow: 0 -1px 0 rgb(87, 21, 21) !important;
+    transition: all 0.3s ease;
+}
+
 </style>
 
 <div class="page-container">
     <div class="main-content">
+        <h1 class="title">flowmodoro</h1>
+        <p class="desc">flowmodoro is an upgraded version of pomodoro. It works by evelating your flowstate and giving you a normal time of break. Made by weemizo©</p>
         <div class="module-container">
             <div class="stopwatch-container white-border">
                 <div class="timer">
                     <div class="time">
                         <div class="timeText">
                             <h1>@FormatTime(elapsedSeconds)</h1>
-                            <h2>:00</h2>
                         </div>
                         @if (!TimerService.IsRunning)
                         {
@@ -154,15 +220,31 @@
                     <h3>Interruptions</h3>
                     <div class="flexRow counter">
                         <button class="btn btn-primary" @onclick="DecrementCount">-</button>
-                        <h1>@currentCount</h1>
+                        <h1>@currentInterruptions</h1>
                         <button class="btn btn-primary" @onclick="IncrementCount">+</button>
                     </div>
                 </div>
                 <div class="estimated-break white-border">
-                    <h3>Estimated <br>Break Time:</h3>
-                    <h2 class="break-time"><strong>@pauseTime</strong> min</h2>
+                    <h3>Estimated Break Time:</h3>
+                    <h2 class="break-time"><strong>@pauseTime</strong> seconds</h2>
                 </div>
             </div>
+            <div class="todo-container">
+                <h3>Todo List</h3>
+                    <div class="todo-input">
+                    <input type="text" @bind="newTodo" placeholder="Enter a new todo" />
+                    <button class="button" @onclick="AddTodo">Add</button>
+            </div>
+            <ul class="todo-list">
+            @foreach (var todo in todos)
+            {
+            <li>
+                @todo
+                <button class="remove-button" @onclick="() => RemoveTodo(todo)">Remove</button>
+            </li>
+            }
+    </ul>
+</div>
         </div>
     </div>
 </div>
@@ -171,7 +253,10 @@
     private int elapsedSeconds;
     private int pauseTime;
     private DateTime startTime;
-    private int currentCount = 0;
+    private int currentInterruptions = 0;
+
+    private List<string> todos = new List<string>();
+    private string newTodo = string.Empty;
 
     private void StartTimer()
     {
@@ -201,7 +286,7 @@
     private void CalculateBreakTime()
     {
         var elapsedSeconds = (int)(DateTime.Now - startTime).TotalSeconds;
-        pauseTime = elapsedSeconds / 5;
+        pauseTime = elapsedSeconds / SettingsService.CustomizedBreakTime;
 
         var timer = new System.Timers.Timer(1000);
         timer.Elapsed += (sender, e) =>
@@ -224,19 +309,32 @@
         TimeSpan time = TimeSpan.FromSeconds(seconds);
         return $"{time.Minutes:00}:{time.Seconds:00}";
     }
-        private void IncrementCount()
-    {
-        currentCount++;
-    }
-    
-        private void DecrementCount()
-    {
-        currentCount--;
 
-        if (currentCount < 0)
+    private void IncrementCount()
+    {
+        currentInterruptions++;
+    }
+
+    private void DecrementCount()
+    {
+        currentInterruptions--;
+
+        if (currentInterruptions < 0)
         {
-            currentCount = 0;
+            currentInterruptions = 0;
+        }
+    }
+    private void AddTodo()
+    {
+        if (!string.IsNullOrWhiteSpace(newTodo))
+        {
+            todos.Add(newTodo);
+            newTodo = string.Empty; // Clear input
         }
     }
 
+    private void RemoveTodo(string todo)
+    {
+        todos.Remove(todo);
+    }
 }

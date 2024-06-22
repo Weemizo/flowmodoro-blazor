@@ -1,0 +1,77 @@
+@namespace FlowmodoroTimer.Components
+
+<style>
+.popup-menu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+
+.popup-content {
+    background: white;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    width: 80%;
+    max-width: 500px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.close-btn {
+    float: right;
+    cursor: pointer;
+    color: red;
+}
+
+.nav-item {
+    margin: 1rem 0;
+}
+
+.nav-link {
+    display: flex;
+    align-items: center;
+    color: #333;
+    text-decoration: none;
+}
+
+.nav-link:hover {
+    color: #0056b3;
+}
+</style>
+
+<div class="popup-menu" style="display: @(IsVisible ? "block" : "none")">
+    <div class="popup-content">
+        <div class="close-btn" @onclick="Close">x</div>
+        <nav>
+            <div class="nav-item">
+                <NavLink class="nav-link" href="/" @onclick="Close">
+                    <span class="bi bi-clock-fill" aria-hidden="true"></span> Flowmodoro Timer
+                </NavLink>
+            </div>
+            <div class="nav-item">
+                <NavLink class="nav-link" href="/settings" @onclick="Close">
+                    <span class="bi bi-gear-fill" aria-hidden="true"></span> Settings
+                </NavLink>
+            </div>
+        </nav>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public bool IsVisible { get; set; }
+
+    [Parameter]
+    public EventCallback OnClose { get; set; }
+
+    private void Close()
+    {
+        IsVisible = false;
+        OnClose.InvokeAsync(null);
+    }
+}

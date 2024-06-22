@@ -4,16 +4,15 @@ namespace FlowmodoroTimer.Services
     {
         private Timer? _timer;
         private int _remainingSeconds;
-        private Action<int>? _onTick; // Define a delegate to hold the callback function
-
+    private Action<int>? _onTick; // definiowanie delegata do przechowywania callbaczka co tick [https://www.plukasiewicz.net/Csharp_dla_zaawansowanych/Delegaty]
         public bool IsRunning { get; private set; }
 
-        // Method to start the timer and accept a callback function to be called on each tick
+        // Sposob na odpalanianie timera i przekazywanie callbacka wywoływanego co tick
         public void Start(Action<int> onTick)
         {
             _remainingSeconds = 0;
             IsRunning = true;
-            _onTick = onTick; // Assign the callback function
+            _onTick = onTick; // przypisanie callbacka 
             _timer = new Timer(Tick, null, 0, 1000);
         }
 
@@ -28,13 +27,13 @@ namespace FlowmodoroTimer.Services
             _timer?.Dispose();
             _remainingSeconds = 0;
             IsRunning = false;
-            _onTick?.Invoke(_remainingSeconds); // Notify callback with reset time
+            _onTick?.Invoke(_remainingSeconds); // wywolanie callbacka przy resetowaniu
         }
 
         private void Tick(object? state)
         {
             _remainingSeconds++;
-            _onTick?.Invoke(_remainingSeconds); // Call the callback function on each tick
+            _onTick?.Invoke(_remainingSeconds); // wywolanie callbacka przy kazdym ticku
         }
     }
 }

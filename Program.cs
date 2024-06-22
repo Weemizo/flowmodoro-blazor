@@ -8,5 +8,6 @@ builder.RootComponents.Add<flowmodoro_blazor.App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
 builder.Services.AddScoped<TimerService>();
+builder.Services.AddScoped<SettingsService>();
 
 await builder.Build().RunAsync();

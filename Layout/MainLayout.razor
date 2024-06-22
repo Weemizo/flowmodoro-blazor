@@ -1,16 +1,33 @@
 ﻿@inherits LayoutComponentBase
+@using FlowmodoroTimer.Components
+
 <div class="page">
     <div class="sidebar">
         <NavMenu />
     </div>
 
     <main>
-        <div class="top-row px-4">
-            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
-        </div>
-
-        <article class="content px-4">
+        <article>
+            <button @onclick="TogglePopup">
+                <span class="bi bi-list" aria-hidden="true"></span> Menu
+            </button>
             @Body
         </article>
     </main>
+
+    <PopupMenu IsVisible="@showPopup" OnClose="ClosePopup" />
 </div>
+
+@code {
+    private bool showPopup = false;
+
+    private void TogglePopup()
+    {
+        showPopup = !showPopup;
+    }
+
+    private void ClosePopup()
+    {
+        showPopup = false;
+    }
+}

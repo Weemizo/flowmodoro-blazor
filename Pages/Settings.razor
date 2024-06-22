@@ -1,0 +1,117 @@
+@page "/settings"
+@inject SettingsService SettingsService
+@inject IJSRuntime JsRuntime
+
+<style>
+    textarea:focus, input:focus, button:focus {
+        outline: none;
+    }
+
+    *:focus {
+        outline: none;
+    }
+
+    button {
+        text-decoration: none;
+        display: inline-block;
+        vertical-align: middle;
+        text-shadow: 0 -1px 0 rgb(255, 255, 255);
+        padding: 1rem 2rem;
+        margin: 0.5rem;
+        border: none;
+        border-radius: 0.5rem;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        text-align: center;
+        background-image: linear-gradient(180deg, rgb(5, 39, 103) 0%, #3a0647 70%);
+        -webkit-text-fill-color: transparent;
+    }
+
+    button:hover {
+        background-image: linear-gradient(180deg, rgb(5, 39, 103) 0%, #3a0647 70%);
+        text-shadow: 0 -1px 0 rgb(131, 131, 131);
+        transition: all 0.3s ease;
+    }
+
+    .customizedBreakTimer {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        margin-top: 2rem;
+        position: relative;
+    }
+
+    input {
+        background: linear-gradient(180deg, rgb(5, 39, 103) 0%, #3a0647 70%);
+        height: 0.5rem;
+        border-radius: 0.5rem;
+        margin-bottom: 1rem;
+        outline: none;
+        transition: background 450ms ease-in;
+        -webkit-appearance: none;
+    }
+
+    .customizedBreakText {
+        text-align: center;
+        font-size: 2.5rem;
+        background: linear-gradient(180deg, rgb(5, 39, 103) 0%, #3a0647 70%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .popup {
+        position: absolute;
+        top: calc(100% + 1rem); 
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: #0f003f8e;
+        color: #fff;
+        padding: 1rem;
+        border-radius: 1rem;
+        width: 20rem;
+        z-index: 1000;
+        display: none;
+    }
+
+    .popup.active {
+        display: block; /* Show when active */
+    }
+
+    .breakTimeInfo {
+        font-size: 1rem;
+        word-break: normal;
+    }
+    br {
+        display: block;
+        margin: 0.5rem 0;
+    }
+
+</style>
+
+<div class="customizedBreakTimer">
+    <button @onclick="TogglePopup">?</button>
+    <div class="popup" id="breakTimeInfo">
+        Customizing your break time might be useful if you don't feel like you get enough break. 
+        <br> The default set is <strong><i>5</i></strong>, which means that any time you spend is divided by <strong><i>5</i></strong>
+        <br> For example, if you press the button and stop after <strong><i>60</i></strong> seconds, you get <strong><i>20</i></strong> seconds of break.
+    </div>
+    <input type="range" min="1" max="25" @bind="SettingsService.CustomizedBreakTime" />
+    <p class="customizedBreakText">Customized Break Time: @SettingsService.CustomizedBreakTime</p>
+</div>
+
+@* blazor nie obsluguje popupow bezposrednio, wiec trzeba zrobic to js'em *@
+<script>
+    window.togglePopup = function () {
+        const popup = document.getElementById('breakTimeInfo');
+        popup.classList.toggle('active');
+    };
+</script>
+
+@code {
+    @* asynchroniczne uruchamianie popupa *@
+    private async Task TogglePopup() 
+    {
+        await JsRuntime.InvokeVoidAsync("togglePopup");
+    }
+}
